@@ -1,0 +1,24 @@
+   services:
+     db:
+       image: mysql:8
+       environment:
+         MYSQL_ROOT_PASSWORD: root
+         MYSQL_DATABASE: stock_portfolio
+       ports:
+         - "3307:3306"
+       volumes:
+         - db_data:/var/lib/mysql
+         - ./database/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+         - ./database/seed.sql:/docker-entrypoint-initdb.d/2-seed.sql
+
+     phpmyadmin:
+       image: phpmyadmin
+       environment:
+         PMA_HOST: db
+       ports:
+         - "8081:80"
+       depends_on:
+         - db
+
+   volumes:
+     db_data:
