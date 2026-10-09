@@ -89,4 +89,16 @@ router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
     }
 });
 
+const {refreshPrices} = require('../services/priceService');
+
+router.post('/refresh', authenticate, requireAdmin, async (req, res) => {
+    try {
+        const updated = await refreshPrices();
+        res.json({ message: `Prices refreshed`, updated });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 module.exports = router;
